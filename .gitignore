@@ -8,6 +8,7 @@ __pycache__/
 # Data/Indexes
 indexes/
 artifacts/
+data/uploads/
 
 # Streamlit
 .streamlit/

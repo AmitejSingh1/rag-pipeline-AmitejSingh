@@ -10,8 +10,40 @@ st.set_page_config(page_title="RAG Demo", page_icon="📚", layout="wide")
 st.title("RAG Pipeline Demo")
 
 with st.sidebar:
+    st.header("Document Upload")
+    uploaded_files = st.file_uploader(
+        "Upload documents (PDF or TXT)",
+        type=["pdf", "txt"],
+        accept_multiple_files=True,
+        help="Upload one or more PDF or TXT files to build the index"
+    )
+    
+    # Save uploaded files
+    upload_dir = "data/uploads"
+    use_uploaded = False
+    
+    if uploaded_files:
+        os.makedirs(upload_dir, exist_ok=True)
+        for uploaded_file in uploaded_files:
+            file_path = os.path.join(upload_dir, uploaded_file.name)
+            with open(file_path, "wb") as f:
+                f.write(uploaded_file.getbuffer())
+        st.success(f"✅ {len(uploaded_files)} file(s) uploaded!")
+        use_uploaded = True
+        with st.expander("📄 View uploaded files"):
+            for f in uploaded_files:
+                st.write(f"• {f.name} ({f.size / 1024:.1f} KB)")
+    
+    st.divider()
     st.header("Settings")
-    docs_dir = st.text_input("Documents directory", value="data")
+    
+    # Show which source will be used
+    if use_uploaded and uploaded_files:
+        st.info("📤 Will use uploaded files to build index")
+    else:
+        st.info("📁 Will use documents from directory")
+    
+    docs_dir = st.text_input("Documents directory (if not using uploads)", value="data", disabled=use_uploaded and bool(uploaded_files))
     index_dir = st.text_input("Index directory", value="indexes")
     top_k = st.slider("Top K", min_value=1, max_value=10, value=5, step=1)
     build_clicked = st.button("Build/Refresh Index")
@@ -66,14 +98,27 @@ pipe = get_pipeline(index_dir, backend, local_model)
 
 if build_clicked:
     with st.spinner("Building index..."):
-        # Count documents before building
+        # Determine which directory to use
         from src.rag.ingest import load_corpus
-        docs = load_corpus(docs_dir)
-        if len(docs) == 0:
-            st.error("No documents found! Please add .txt or .pdf files to the data directory.")
+        
+        if use_uploaded and uploaded_files:
+            source_dir = upload_dir
+            source_type = "uploaded files"
         else:
-            st.info(f"Found {len(docs)} document(s): {', '.join([d['id'] for d in docs])}")
-            pipe.build_index(docs_dir)
+            source_dir = docs_dir
+            source_type = "directory"
+        
+        docs = load_corpus(source_dir)
+        if len(docs) == 0:
+            if use_uploaded and uploaded_files:
+                st.error("No uploaded files found! Please upload PDF or TXT files first.")
+            elif use_uploaded:
+                st.error("No files uploaded yet. Please use the file uploader above.")
+            else:
+                st.error(f"No documents found in {docs_dir}! Please add .txt or .pdf files or use the file uploader.")
+        else:
+            st.info(f"Found {len(docs)} document(s) from {source_type}: {', '.join([d['id'] for d in docs])}")
+            pipe.build_index(source_dir)
             # Reload the index after building
             pipe.load_index()
             st.success(f"Index built and loaded successfully from {len(docs)} document(s)!")
