@@ -23,8 +23,14 @@ class RagPipeline:
             metadata_filename=config.metadata_filename,
         )
 
-        # Prefer OpenAI if key present
-        if os.environ.get("OPENAI_API_KEY"):
+        # Select generator backend
+        backend = config.generator_backend
+        if backend == "auto":
+            if os.environ.get("OPENAI_API_KEY"):
+                backend = "openai"
+            else:
+                backend = "local"
+        if backend == "openai":
             self.generator = OpenAIGenerator(model="gpt-4o-mini")
         else:
             self.generator = LocalGenerator(model_name=config.generator_model)

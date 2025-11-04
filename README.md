@@ -7,7 +7,9 @@ A minimal, modular Retrieval-Augmented Generation (RAG) pipeline that ingests `.
 - Word-based chunking with overlap
 - Embeddings via `sentence-transformers`
 - Vector search via FAISS (inner product)
-- Generation via OpenAI (if `OPENAI_API_KEY` set) or local `flan-t5-small`
+- Generation via OpenAI (if `OPENAI_API_KEY` set) or multiple free local models:
+  - **Encoder-Decoder**: Flan-T5 (small/base)
+  - **Decoder-Only**: Gemma (2B/7B), Mistral (7B), Llama-2 (7B/13B)
 - CLI and Streamlit frontend
 - Persisted index and metadata to disk
 
@@ -44,6 +46,15 @@ Optional: Set OpenAI (for higher-quality generation)
 ```powershell
 $env:OPENAI_API_KEY = "sk-..."
 ```
+
+**Note for Llama/Mistral models**: Some models require HuggingFace authentication. If you get an error, run:
+```powershell
+pip install huggingface-hub
+huggingface-cli login
+```
+Then accept the model license on https://huggingface.co when prompted.
+
+**System Requirements**: Larger models (7B+) need 8GB+ RAM. Start with smaller models (flan-t5-small, gemma-2b) if you have limited resources.
 
 ## Usage (CLI)
 1) Build index from documents in `data/`

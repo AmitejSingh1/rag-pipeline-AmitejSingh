@@ -10,7 +10,8 @@ class RagConfig:
     index_dir: str = "indexes"
     metadata_filename: str = "metadata.json"
     faiss_index_filename: str = "faiss.index"
-    generator_model: str = "google/flan-t5-small"  # fallback local model
+    generator_backend: str = "auto"  # auto | local | openai
+    generator_model: str = "google/flan-t5-small"  # default local model
 
 
 

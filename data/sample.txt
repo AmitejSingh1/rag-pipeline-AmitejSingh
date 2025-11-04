@@ -1,5 +1,0 @@
-This repository demonstrates a basic Retrieval-Augmented Generation (RAG) pipeline.
-It ingests text and PDF files, chunks text into overlapping windows, embeds chunks using sentence-transformers, and indexes vectors with FAISS for fast similarity search.
-At query time, it retrieves top-K relevant chunks and prompts a language model to answer grounded by the retrieved context with inline citations like [doc#chunk].
-
-
