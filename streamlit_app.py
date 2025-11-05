@@ -22,6 +22,37 @@ with st.sidebar:
     upload_dir = "data/uploads"
     use_uploaded = False
     
+    col_a, col_b = st.columns(2)
+    with col_a:
+        clear_uploads = st.button("Clear uploaded files", help="Delete all files in data/uploads")
+    with col_b:
+        clear_index = st.button("Clear index", help="Delete saved index to force a fresh rebuild")
+
+    if clear_uploads:
+        try:
+            if os.path.exists(upload_dir):
+                for name in os.listdir(upload_dir):
+                    try:
+                        os.remove(os.path.join(upload_dir, name))
+                    except IsADirectoryError:
+                        pass
+            st.success("Uploads cleared.")
+        except Exception as e:
+            st.error(f"Failed to clear uploads: {e}")
+
+    if clear_index:
+        try:
+            if os.path.exists(index_dir):
+                for name in os.listdir(index_dir):
+                    p = os.path.join(index_dir, name)
+                    try:
+                        os.remove(p)
+                    except IsADirectoryError:
+                        pass
+            st.success("Index cleared. Please click 'Build/Refresh Index'.")
+        except Exception as e:
+            st.error(f"Failed to clear index: {e}")
+
     if uploaded_files:
         os.makedirs(upload_dir, exist_ok=True)
         for uploaded_file in uploaded_files:
