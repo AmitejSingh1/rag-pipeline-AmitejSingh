@@ -21,6 +21,8 @@ with st.sidebar:
     # Save uploaded files
     upload_dir = "data/uploads"
     use_uploaded = False
+    # Ensure index_dir is defined before using it in clear buttons
+    index_dir = st.text_input("Index directory", value="indexes")
     
     col_a, col_b = st.columns(2)
     with col_a:
@@ -75,7 +77,6 @@ with st.sidebar:
         st.info("📁 Will use documents from directory")
     
     docs_dir = st.text_input("Documents directory (if not using uploads)", value="data", disabled=use_uploaded and bool(uploaded_files))
-    index_dir = st.text_input("Index directory", value="indexes")
     top_k = st.slider("Top K", min_value=1, max_value=10, value=5, step=1)
     build_clicked = st.button("Build/Refresh Index")
     st.divider()
