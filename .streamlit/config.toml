@@ -10,3 +10,6 @@ secondaryBackgroundColor = "#F0F2F6"
 textColor = "#262730"
 font = "sans serif"
 
+[environment]
+PYO3_USE_ABI3_FORWARD_COMPATIBILITY = "1"
+
