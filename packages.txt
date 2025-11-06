@@ -1,3 +1,0 @@
-# This file is required for Streamlit Cloud
-# List any system packages needed here (usually empty for Python projects)
-
