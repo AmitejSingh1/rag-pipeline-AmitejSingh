@@ -93,11 +93,15 @@ streamlit run streamlit_app.py
    - **Main file path**: `streamlit_app.py`
 
 5. **Add secrets** (optional, for API keys):
-   - Click "Advanced settings"
+   - Click "Advanced settings" → "Secrets"
    - Add secrets:
      ```
      OPENAI_API_KEY=sk-your-key-here
      HUGGINGFACE_HUB_TOKEN=hf-your-token-here
+     ```
+   - **Also add** (for Python 3.13 compatibility):
+     ```
+     PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
      ```
 
 6. **Deploy**: Click "Deploy" and wait ~2 minutes
