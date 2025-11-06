@@ -77,7 +77,36 @@ streamlit run streamlit_app.py
 - Generation falls back to local `flan-t5-small` when `OPENAI_API_KEY` is absent.
 - Index persistence stores FAISS index and JSON metadata for reproducibility.
 
-## Docker (optional)
+## Deployment
+
+### Streamlit Cloud (Recommended)
+
+1. **Push your code to GitHub** (already done: `rag-pipeline-AmitejSingh`)
+
+2. **Go to Streamlit Cloud**: https://share.streamlit.io/
+
+3. **Sign in with GitHub** and click "New app"
+
+4. **Configure your app**:
+   - **Repository**: Select `AmitejSingh1/rag-pipeline-AmitejSingh`
+   - **Branch**: `main`
+   - **Main file path**: `streamlit_app.py`
+
+5. **Add secrets** (optional, for API keys):
+   - Click "Advanced settings"
+   - Add secrets:
+     ```
+     OPENAI_API_KEY=sk-your-key-here
+     HUGGINGFACE_HUB_TOKEN=hf-your-token-here
+     ```
+
+6. **Deploy**: Click "Deploy" and wait ~2 minutes
+
+7. **Your app will be live at**: `https://rag-pipeline-amitej-singh.streamlit.app`
+
+**Note**: On Streamlit Cloud, the `indexes/` directory is ephemeral (resets on restart). Users will need to rebuild the index after uploading documents.
+
+### Docker (optional)
 Build and run:
 ```powershell
 docker build -t rag-pipeline .
