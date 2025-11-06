@@ -1,17 +1,18 @@
-faiss-cpu==1.8.0.post1
-sentence-transformers==3.0.1
-numpy==1.26.4
-pandas==2.2.2
-pypdf==4.3.1
+--extra-index-url https://download.pytorch.org/whl/cpu
+
 streamlit==1.37.1
+faiss-cpu
+sentence-transformers==3.0.1
+numpy>=2.1.0
+pandas>=2.2.3
+pypdf==4.3.1
 transformers==4.44.2
 accelerate==0.34.2
 huggingface-hub==0.24.6
+torch>=2.2.0
 openai==1.48.0
 uvicorn==0.30.6
 fastapi==0.114.0
 click==8.1.7
 python-dotenv==1.0.1
 requests==2.31.0
-
-
