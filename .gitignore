@@ -11,7 +11,8 @@ artifacts/
 data/uploads/
 
 # Streamlit
-.streamlit/
+.streamlit/*
+!.streamlit/config.toml
 
 # OS
 .DS_Store
