@@ -50,9 +50,11 @@ class LocalGenerator:
                     f"   $env:HTTPS_PROXY = 'your_proxy'"
                 )
             
+            # Only pass token if we have one, or if None for public models
+            token_param = hf_token if hf_token else None
             self.tokenizer = AutoTokenizer.from_pretrained(
                 model_name,
-                token=hf_token if hf_token else True  # Use token if available, otherwise try to use cached login
+                token=token_param  # None for public models, token for gated models
             )
         except ValueError as ve:
             # Re-raise our custom network errors
@@ -103,9 +105,11 @@ class LocalGenerator:
         if is_decoder_only:
             # Use CausalLM for decoder-only models
             try:
+                # Only pass token if we have one
+                token_param = self.hf_token if self.hf_token else None
                 self.model = AutoModelForCausalLM.from_pretrained(
                     model_name,
-                    token=self.hf_token if self.hf_token else True
+                    token=token_param
                 )
             except Exception as e:
                 error_msg = str(e)
@@ -128,9 +132,11 @@ class LocalGenerator:
         else:
             # Use Seq2SeqLM for encoder-decoder models (flan-t5, etc.)
             try:
+                # Only pass token if we have one
+                token_param = self.hf_token if self.hf_token else None
                 self.model = AutoModelForSeq2SeqLM.from_pretrained(
                     model_name,
-                    token=self.hf_token if self.hf_token else True
+                    token=token_param
                 )
             except Exception as e:
                 raise ValueError(f"Failed to load model {model_name}. Error: {e}")
